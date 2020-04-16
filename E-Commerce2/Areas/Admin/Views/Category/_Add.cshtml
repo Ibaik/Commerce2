@@ -1,0 +1,41 @@
+﻿@using E_Commerce2
+@using E_Commerce2.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model DataAccessLayer.ViewModel.CategoryVM
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Default Modal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-action="AddCategories" asp-controller="category" asp-area="Admin" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">English Name </label>
+                        <input asp-for="EnglishName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Arabic Name </label>
+                        <input asp-for="ArabicName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">French Name </label>
+                        <input asp-for="FrenchName" class="form-control" />
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

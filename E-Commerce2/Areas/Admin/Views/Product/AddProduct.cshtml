@@ -1,0 +1,287 @@
+﻿@using E_Commerce2
+@using E_Commerce2.Models
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model DataAccessLayer.ViewModel.ProductVM
+@{ ViewData["Title"] = "AddProduct"; }
+
+<h1>AddProduct</h1>
+
+<form method="post"class="dropzone" id="dropzoneForm" enctype="multipart/form-data" asp-action="AddProducts" asp-controller="Product" asp-area="Admin" 
+      data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+    @*class="dropzone" id="dropzoneForm"*@
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="EnglishName">English Name </label>
+                    <input asp-for="EnglishName" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">Arabic Name </label>
+                    <input asp-for="ArabicName" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">French Name </label>
+                    <input asp-for="FrenchName" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">Price </label>
+                    <input asp-for="Price" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">Quantity</label>
+                    <input asp-for="Quantity" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">Disaccunt </label>
+                    <input asp-for="Disaccunt" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">IPAdress</label>
+                    <input asp-for="IPAdress" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="File"></label>
+                    <div class="custom-file">
+                        <input multiple type="file" name="File" asp-for="File" class="form-control custom-file-input">
+                        <label class="custom-file-label">Choose File...</label>
+                    </div>
+
+                    <span asp-validation-for="File" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select class="custom-select" asp-for="@Model.CategoryId" asp-items="@Model.Categories">
+                        <option value="" selected>--اختر--</option>
+                    </select>
+                    <small>   <span asp-validation-for="CategoryId" class="text-danger"></span></small>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+     <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="fallback">
+                        <input type="file" name="files" multiple />
+                        @*<input type="submit" value="@_._("Upload")" />*@
+        </div>
+        </div>
+        </div>
+        </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+
+                <input type="submit" value="Add" class="btn btn-outline-info" />
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+@*<div class="modal" aria-hidden="true">
+        <span id="dictDefaultMessage">@_._("Drop files here or click to upload.")</span>
+        <span id="dictFallbackMessage">@_._("Your browser does not support drag'n'drop file uploads.")</span>
+        <span id="dictFallbackText">@_._("Please use the fallback form below to upload your files like in the olden days.")</span>
+        <span id="dictFileTooBig">@_._("File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.")</span>
+        <span id="dictInvalidFileType">@_._("You can't upload files of this type.")</span>
+        <span id="dictResponseError">@_._("Server responded with {{statusCode}} code.")</span>
+        <span id="dictCancelUpload">@_._("Cancel upload")</span>
+        <span id="dictCancelUploadConfirmation">@_._("Are you sure you want to cancel this upload?")</span>
+        <span id="dictUploadCanceled">@_._("Upload cenceled.")</span>
+        <span id="dictRemoveFile">@_._("Delete")</span>
+        <span id="dictRemoveFileConfirmation">@_._("Are you sure you want to delete this file?")</span>
+        <span id="dictMaxFilesExceeded">@_._("You can not upload any more files.")</span>
+        <span id="dictFileSizeUnits_TB">@_._("TB")</span>
+        <span id="dictFileSizeUnits_GB">@_._("GB")</span>
+        <span id="dictFileSizeUnits_MB">@_._("MB")</span>
+        <span id="dictFileSizeUnits_KB">@_._("KB")</span>
+        <span id="dictFileSizeUnits_b">@_._("b")</span>
+    </div>*@
+
+
+
+
+@section CssLinks
+{
+    <link rel="stylesheet" href="~/dropzone/min/basic.min.css" />
+    <link rel="stylesheet" href="~/dropzone/min/dropzone.min.css" />
+    <link href="~/jquery-toast-plugin-master/dist/jquery.toast.min.css" rel="stylesheet" />
+}
+@section ScriptsLinks
+{
+    <script src="~/dropzone/min/dropzone.min.js"></script>
+    <script src="~/jquery-toast-plugin-master/dist/jquery.toast.min.js"></script>
+}
+@section Scripts
+{
+<script>
+    $(function () {
+
+        completed = function (response) {
+            alert("sssssssssssssssssssssssssss");
+            var result = response.responseJSON
+            console.log(response.responseJSON)
+            debugger;
+            $.toast({
+                heading: result.color,
+                text: result.msg,
+                showHideTransition: 'slide',
+                icon: result.color
+            })
+        };
+        failure = function (jqXHR, status) {
+            $.toast({
+                heading: 'Error',
+                text: 'Uncaught Error.\n' + jqXHR.responseText,
+                showHideTransition: 'fade',
+                icon: 'error'
+            })
+        };
+    });
+
+</script>
+
+
+    <script>
+        $('#downloadModal').on('show.bs.modal', function (e) {
+
+            //get data-id attribute of the clicked element
+            var fileUrl = $(e.relatedTarget).data('img-url');
+            var fileSize = $(e.relatedTarget).data('file-size');
+            var fileName = $(e.relatedTarget).data('file-name');
+
+            var fs = fileSize / (1024 * 1024);
+
+            //populate the textbox
+            $("#modalUrl").attr("value", fileUrl);
+            $("#modalDownload").attr("href", fileUrl);
+            $("#modalFileSize").html(fs.toFixed(2) + " MB");
+            $("#modalFileName").html(fileName);
+        });
+    </script>
+
+    <script>
+       
+        Dropzone.options.dropzoneForm = {
+            addRemoveLinks: true,
+            paramName: "files", //default param name is "file", make it "files" so it matches parameter name in the method
+            //resizeWidth: 800,
+            //resizeHeight: 600,
+            //resizeMethod: 'contain',
+            //resizeQuality: 1,
+            autoProcessQueue: false,
+
+            init: function () {
+                var myDropzone = this;
+                $.getJSON('./?handler=ListFolderContents').done(function (data) {
+                    //Call the action method to load the images from the server
+
+                    if (data !== null && data.length > 0) {
+
+                        $.each(data, function (index, item) {
+                            //// Create the mock file:
+                            var mockFile = {
+                                name: item.name,
+                                size: item.fileSize,
+                                filePath: item.filePath
+                            };
+
+                            // Call the default addedfile event handler
+                            myDropzone.emit("addedfile", mockFile);
+
+                            // And optionally show the thumbnail of the file:
+                            myDropzone.emit("thumbnail", mockFile, item.filePath);
+
+                            // Make sure there is no progress bar ober tha image
+                            myDropzone.emit("complete", mockFile);
+                        });
+                    }
+                });
+
+                myDropzone.on("addedfile", function (file) {
+                    var downloadBtn = Dropzone.createElement("<a class='dz-download' style='visibility:hidden' href='#downloadModal' data-file-name='" + file.name + "' data-toggle='modal' data-file-size='" + file.size + "' data-img-url='" + file.filePath + "'><i class='fas fa-download text-success'></i></a>");
+
+                    file.previewElement.appendChild(downloadBtn);
+
+                    file.previewElement.addEventListener("click", function () {
+                        downloadBtn.click();
+                    });
+                });
+            },
+
+            removedfile: function removedfile(file) {
+                $.getJSON("./?handler=DeleteFile&file=" + file.name).done(function (result) {
+                    console.log("delete: " + result);
+                    if (result === true) {
+                        if (file.previewElement != null && file.previewElement.parentNode != null) {
+                            file.previewElement.parentNode.removeChild(file.previewElement);
+                        }
+                    }
+                });
+            },
+        };
+
+        // get elements for localization مش عارف ايش قصدوا في هذا للغة والمنطقة الجغرافيه
+
+        with (Dropzone.prototype.defaultOptions) {
+            dictDefaultMessage = document.getElementById("dictDefaultMessage").innerText;
+            dictFallbackMessage = document.getElementById("dictFallbackMessage").innerText;
+            dictFallbackText = document.getElementById("dictFallbackText").innerText;
+            dictFileTooBig = document.getElementById("dictFileTooBig").innerText;
+            dictInvalidFileType = document.getElementById("dictInvalidFileType").innerText;
+            dictResponseError = document.getElementById("dictResponseError").innerText;
+            dictCancelUpload = document.getElementById("dictCancelUpload").innerText;
+            dictCancelUploadConfirmation = document.getElementById("dictCancelUploadConfirmation").innerText;
+            dictUploadCanceled = document.getElementById("dictUploadCanceled").innerText;
+            dictRemoveFile = document.getElementById("dictRemoveFile").innerText;
+            dictRemoveFileConfirmation = document.getElementById("dictRemoveFileConfirmation").innerText; // if this is null, the user will not be prompted when deleting file.
+            dictMaxFilesExceeded = document.getElementById("dictMaxFilesExceeded").innerText;
+            dictFileSizeUnits = {
+                tb: document.getElementById("dictFileSizeUnits_TB").innerText,
+                gb: document.getElementById("dictFileSizeUnits_GB").innerText,
+                mb: document.getElementById("dictFileSizeUnits_MB").innerText,
+                kb: document.getElementById("dictFileSizeUnits_KB").innerText,
+                b: document.getElementById("dictFileSizeUnits_b").innerText
+            };
+        };
+    </script>
+
+
+
+}

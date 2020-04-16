@@ -1,0 +1,205 @@
+﻿
+@{ ViewData["Title"] = "Index"; }
+
+<h1>عرض المنتجات</h1>
+
+
+<style>
+
+    #ProductTable_filter {
+        text-align: end;
+    }
+
+    .table {
+        font-size: 18px;
+    }
+</style>
+
+<table class="table table-striped" id="ProductTable">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col"> E.Product Name</th>
+            <th scope="col">Price </th>
+            <th scope="col">Quantity </th>
+            <th scope="col">DisCount</th>
+            <th scope="col"> Date</th>
+            <th scope="col"> Details</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<div id="test"></div>
+<partial name="_AddProduct" />
+
+@section CssLinks
+{
+    <link href="~/DataTables-1.10.20/media/css/dataTables.bootstrap4.css" rel="stylesheet" />
+}
+
+@section ScriptsLinks
+{
+
+    <script src="~/DataTables-1.10.20/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables-1.10.20/media/js/dataTables.bootstrap4.js"></script>
+    <script src="~/js/moment.min.js"></script>
+}
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        completed = function (resp) {
+            $('#test').empty();
+            if (resp.responseText !== "" && resp.responseText !== "undifined" && resp.responseText !== null) {
+
+                var $html = resp.responseText;
+                $('#test').html($html);
+                $('.modal').modal('show');
+            }
+        };
+
+        $(document).ready(function () {
+            $(".AddProduct").click(function () {
+                $('#modalAddProduct').modal('show');
+            });
+            var table = $("#ProductTable");
+
+            $(document).ready(function () {
+                BindDataTable();
+            })
+            $('#SearchName').click(function () {
+                BindDataTable.ajax.reload();
+
+            });
+            var BindDataTable = function (response) {
+
+                table.DataTable({
+                    "destroy": true,
+                    "bServerSide": true,
+                    "sSearch": "Search all columns:",
+                    "sAjaxSource": "/Admin/Product/GetProduct",
+                    //"aaSorting": [[0, "desc"]],
+                    "processing": "true",
+                    // Internationalisation. For more info refer to http://datatables.net/manual/i18n
+                    "language": {
+                        //"aria": {
+                        //    "sortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        //    "sortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                        //},
+                        "emptyTable": "لا يوجد بيانات",
+                        "info": "عرض _START_ إلى _END_ من _TOTAL_ صفوف",
+                        "infoEmpty": "لم يتم العثور على نتائج",
+                        "infoFiltered": "(filtered1 من _MAX_ العدد الكلي)",
+                        "lengthMenu": "_MENU_ اظهار",
+                        "search": "بحث:",
+                        "processing": '<h1>جاري جلب البيانات ...</h1>',
+                        "zeroRecords": "لم يتم العثور على عناصر مطابقة",
+                        "oPaginate": {
+                            "sFirst": "الأول",
+                            "sPrevious": "السابق",
+                            "sNext": "التالي",
+                            "sLast": "الأخير"
+                        },
+                    },
+                    aoData: {
+                        "data": function (d) {
+                            return $.extend({}, d, RefrechParam([
+                                //{ paramId: 'job', inputId: 'job' },
+                                //{ paramId: 'FullName', inputId: 'FullName' },
+                                //{ paramId: 'User_ID', inputId: 'hdnUserID_Search' }
+                            ]));
+                        },
+                    },
+                    "fnServerData": function (sSource, aoData, fnCallback) {
+
+                        $.ajax({
+
+                            type: "post",
+                            data: aoData,
+                            url: sSource,
+                            success: fnCallback
+                        })
+
+                    },
+                    "aoColumns": [
+                        {
+                            data: null, render: function (data, type, row, iDisplayIndex) {
+                                return (iDisplayIndex.row + 1);
+                            }
+
+                        },
+                        { data: "englishName" },
+                        { data: "price" },
+                        { data: "quantity" },
+                        { data: "disaccunt" },
+                        {
+                            data: null, render: function (data, type, row) {
+                                var date = new Date(data.InsertUser);
+                                return moment(data.InsertUser).format("DD-MM-YYYY");
+                            }
+                        },
+                        {
+                            data: null, render: function (data, type, row) {
+
+
+                                return '<a class="btn-group"><a href="/Admin/Product/Details/' + data.id + '" class="btn red btn-sm btn-outline btnActivation sbold" style="margin-left: 5px;" title="عرض تفاصيل"><i class="fa fa-edit fa-address-card-o"></i> عرض تفاصيل </a>'
+                                    + '<a data-ajax="true" data-ajax-method="get" data-ajax-complete="completed" data-ajax-failure ="failure"  class="btn blue btn-sm btn-outline sbold AddProduct" style="margin-left: 5px;" title=" نقل"> <i class="fa fa-edit fa-fw"></i> Add Product</a></div>'
+                                //+ '<a href="AddEditUser?UserID=' + data.id + '" class="btn blue btn-sm btn-outline sbold" style="margin-left: 5px;" title=" تعديل"> <i class="fa fa-edit fa-fw"></i> تعديل</a></div>'
+                                //+ '<a href=/Quarantine/AddPersonMovement?id=' + data.id + '    data-ajax="true" data-ajax-method="get" data-ajax-complete="completed" data-ajax-failure ="failure"  class="btn blue btn-sm btn-outline sbold" style="margin-left: 5px;" title=" نقل"> <i class="fa fa-edit fa-fw"></i> نقل نزيل</a></div>'
+                                   // +'<a class="AddProduct"> Add Product</a>'
+
+                            }
+                        }
+
+                    ], "rowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+
+                    }, "drawCallback": function (settings) {
+
+                        //if (typeof DrawCallbackFunction === "function") {
+                        //    DrawCallbackFunction();
+
+                        //}
+                        $('#ProductTable').on('click', 'a.AddProduct', function () {
+                            $('#modalAddProduct').modal('show');
+                        });
+
+                    },
+
+                });
+
+
+            }
+
+
+
+
+        });
+        completedAdd = function (response) {
+            var result = response.responseJSON
+            console.log(response.responseJSON)
+            $.toast({
+                heading: result.color,
+                text: result.msg,
+                showHideTransition: 'slide',
+                icon: result.color
+            })
+        };
+
+        failureAdd = function (jqXHR, status) {
+            $.toast({
+                heading: 'Error',
+                text: 'Uncaught Error.\n' + jqXHR.responseText,
+                showHideTransition: 'fade',
+                icon: 'error'
+            })
+        };
+
+    </script>
+
+}

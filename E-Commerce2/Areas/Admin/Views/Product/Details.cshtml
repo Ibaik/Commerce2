@@ -1,0 +1,61 @@
+﻿@model DataBaseLayer.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+    var ProductImagePath = "~/ProductImage/" + (Model.ProductImageName ?? "no_images.png");
+
+}
+<style>
+    .imgthumbnail{
+        height:200px;
+        width:auto
+    }
+</style>
+<h1>Details</h1>
+
+
+
+<div class="row">
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+            @*@foreach (int item in Model.)
+            {
+
+            }*@
+            <img class="card-img-top" src="@ProductImagePath" asp-append-version="true" alt="Card image cap">
+            <div class="card-body">
+                <p class="card-text">
+                    Product Name: @Model.EnglishName <br />
+                    Price : @Model.Price <br />
+                    Disaccount : @Model.Disaccunt
+
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <p class="card-text">
+            Product Name: @Model.EnglishName <br />
+            Product Name: @Model.ArabicName <br />
+            Product Name: @Model.FrenchName <br />
+
+            @*Price : @Model.category.EnglishName <br />
+            Price : @Model.category.ArabicName <br />
+            Price : @Model.category.FrenchName <br />*@
+
+            Price : @Model.Price <br />
+            Price : @Model.Quantity <br />
+            Disaccount : @Model.Disaccunt
+
+        </p>
+    </div>
+    
+</div>
+
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        <a asp-action="Index">Back to List</a>
+    </div>

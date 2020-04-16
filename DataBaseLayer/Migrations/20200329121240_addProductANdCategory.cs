@@ -1,0 +1,80 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace DataBaseLayer.Migrations
+{
+    public partial class addProductANdCategory : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ArabicName = table.Column<string>(type: "VARCHAR(250)", maxLength: 250, nullable: true),
+                    FrenchName = table.Column<string>(type: "VARCHAR(250)", maxLength: 250, nullable: true),
+                    EnglishName = table.Column<string>(type: "VARCHAR(250)", maxLength: 250, nullable: true),
+                    InsertUser = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    InsertDate = table.Column<DateTime>(nullable: true),
+                    UpdateUser = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(nullable: true),
+                    IsDelete = table.Column<bool>(nullable: false),
+                    IPAdress = table.Column<string>(type: "VARCHAR(250)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ArabicName = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    FrenchName = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    EnglishName = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    Quantity = table.Column<int>(nullable: false),
+                    Price = table.Column<float>(nullable: false),
+                    Disaccunt = table.Column<float>(nullable: false),
+                    InsertUser = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    InsertDate = table.Column<DateTime>(nullable: true),
+                    UpdateUser = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(nullable: true),
+                    IsDelete = table.Column<bool>(nullable: false),
+                    IPAdress = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    ProductImageLink = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    ProductImageName = table.Column<string>(type: "VARCHAR(250)", nullable: true),
+                    CategoryId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+        }
+    }
+}
